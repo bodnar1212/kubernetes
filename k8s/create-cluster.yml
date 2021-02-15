@@ -1,0 +1,61 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: my-test-k8s-cluster-6
+  region: us-east-1
+vpc:
+  id: "vpc-ba89d8c3"
+  cidr: "172.31.0.0/16"
+  subnets:
+    private:
+      us-east-1b:
+        id: "subnet-5774317b"
+        cidr: "172.31.80.0/20"
+      us-east-1a:
+        id: "subnet-fd915499"
+        cidr: "172.31.0.0/20"
+      us-east-1c:
+        id: "subnet-ca370982"
+        cidr: "172.31.16.0/20"
+      us-east-1f:
+        id: "subnet-370b4e3b"
+        cidr: "172.31.64.0/20"
+      us-east-1d:
+        id: "subnet-5d9ce107"
+        cidr: "172.31.32.0/20"
+#iam:
+#  serviceRoleARN: "arn:aws:iam::11111:role/eks-base-service-role"
+
+#nodeGroups:
+#  - name: ng-1
+#    instanceType: t3.small
+#    desiredCapacity: 3
+##    iam:
+##      instanceProfileARN: "arn:aws:iam::11111:instance-profile/eks-nodes-base-role"
+##      instanceRoleARN: "arn:aws:iam::1111:role/eks-nodes-base-role"
+#    privateNetworking: true
+#    securityGroups:
+#      withShared: true
+#      withLocal: true
+#      attachIDs: ['subnet-5774317b', 'subnet-fd915499', 'subnet-ca370982', 'subnet-370b4e3b', 'subnet-5d9ce107']
+##    ssh:
+##      publicKeyName: 'my-instance-key'
+#    tags:
+#      'environment:basedomain': 'example.org'
+
+managedNodeGroups:
+  - name: managed-1
+    instanceType: t3.small
+    minSize: 2
+    desiredCapacity: 3
+    maxSize: 4
+    availabilityZones: ["us-east-1a", "us-east-1b", "us-east-1c", "us-east-1d", "us-east-1f"]
+    volumeSize: 20
+    privateNetworking: true
+#    ssh:
+#      allow: false
+    labels: {role: worker}
+    tags:
+      'environment:basedomain': 'example.org'
+#    iam:
+#      instanceRoleARN: "arn:aws:iam::1111:role/eks-nodes-base-role"

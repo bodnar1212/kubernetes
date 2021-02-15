@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-web-deployment
+  labels:
+    app: my-k8s-application
+    env: prod
+    owner: andrer_bodnar
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      project: test # Service will look for those PODs Labels
+  template:
+    metadata:
+      labels:
+        project: test
+    spec:
+      containers:
+        - name: test-web
+          image: httpd:latest
+          ports:
+            - containerPort: 80
+        - name: test-web-2
+          image: tomcat:latest
+          ports:
+            - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namne: my-multi-pods-service
+  labels:
+    env: prod
+    owner: ander_bodnar
+spec:
+  type: LoadBalancer
+  selector:
+    project: test
+  ports:
+    - name: test-web-app-listener
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: test-web-2-app-listener
+      protocol: TCP
+      port: 8888
+      targetPort: 8080

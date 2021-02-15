@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-web-deployment
+  labels:
+    app: my-k8s-application
+    env: prod
+    owner: andrer_bodnar
+spec:
+  #replicas: 3 is not needed because we have an autoscaling
+  selector:
+    matchLabels:
+      project: test
+  template:
+    metadata:
+      labels:
+        project: test
+    spec:
+      containers:
+        - name: test-web
+          image: httpd:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizaontalPodAutoscaler
+metadata:
+  name: my-autoscaling
+  spec:
+    scaleTargetRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: my-web-deployment
+      minReplicas: 3
+      maxReplicas: 5
+      metrics:
+        - type: Resource
+          resource:
+            name: cpu
+            targetAverageUtilization: 70
+        - type: Resource
+          resource:
+            name: memory
+            targetAverageUtilization: 80
+
+---
+apiVBersion: v1
+kind: Service
+metadata:
+  name: my-single-pod-service
+  labels:
+    env: prod
+    owner: andrei_bodnar
+spec:
+  selector:
+    project: test #Selecting PODs with those Labels
+    ports:
+      - name: app-listener
+        protocol: TCP
+        port: 80 #Port on Load Balancer
+        targetPort: 80 # Port on Pod (apache)
+    type: LoadBalancer
