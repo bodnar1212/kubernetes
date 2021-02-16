@@ -23,6 +23,11 @@ vpc:
       us-east-1d:
         id: "subnet-5d9ce107"
         cidr: "172.31.32.0/20"
+
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["*"]
+
 #iam:
 #  serviceRoleARN: "arn:aws:iam::11111:role/eks-base-service-role"
 
@@ -52,8 +57,8 @@ managedNodeGroups:
     availabilityZones: ["us-east-1a", "us-east-1b", "us-east-1c", "us-east-1d", "us-east-1f"]
     volumeSize: 20
     privateNetworking: true
-#    ssh:
-#      allow: false
+    ssh:
+      allow: true
     labels: {role: worker}
     tags:
       'environment:basedomain': 'example.org'
