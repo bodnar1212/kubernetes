@@ -1,7 +1,7 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
-  name: my-test-k8s-cluster-6
+  name: brizy-cluster
   region: us-east-1
 vpc:
   id: "vpc-ba89d8c3"
@@ -49,18 +49,19 @@ cloudWatch:
 #      'environment:basedomain': 'example.org'
 
 managedNodeGroups:
-  - name: managed-1
+  - name: managed-ng-1
     instanceType: t3.small
     minSize: 2
     desiredCapacity: 3
     maxSize: 4
     availabilityZones: ["us-east-1a", "us-east-1b", "us-east-1c", "us-east-1d", "us-east-1f"]
-    volumeSize: 20
+    volumeSize: 40
     privateNetworking: true
     ssh:
       allow: true
+      #publicKeyPath: /home/andrei/.ssh/id_rsa.pub
     labels: {role: worker}
-    tags:
-      'environment:basedomain': 'example.org'
+#    tags:
+#      'environment:basedomain': 'example.org'
 #    iam:
 #      instanceRoleARN: "arn:aws:iam::1111:role/eks-nodes-base-role"

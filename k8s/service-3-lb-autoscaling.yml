@@ -59,4 +59,4 @@ spec:
       protocol: TCP
       port: 80 #Port on Load Balancer
       targetPort: 80 # Port on Pod (apache)
-  type: LoadBalancer
+  type: ClusterIp
